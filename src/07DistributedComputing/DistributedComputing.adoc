@@ -1,253 +1,131 @@
-[[distributed-events]]
-== Distributed Events
+[[distributed-computing]]
+== Distributed Computing
 
-You can register for Hazelcast entry events so you will be notified when those events occur. Event Listeners are cluster-wide: when a listener is registered in one member of cluster, it is actually registered for events that originated at any member in the cluster. When a new member joins, events originated at the new member will also be delivered.
+[[executor-service]]
+=== Executor Service
 
-An Event is created only if you registered an event listener. If no listener is registered, then no event will be created. If you provided a predicate when you registered the event listener, pass the predicate before sending the event to the listener (node/client).
+One of the coolest features of Java 1.5 is the Executor framework, which allows you to asynchronously execute your tasks (logical units of work), such as database query, complex calculation, and image rendering.
 
-As a rule of thumb, your event listener should not implement heavy processes in its event methods which block the thread for a long time. If needed, you can use `ExecutorService` to transfer long running processes to another thread and thus offload the current listener thread.
+[[executor-overview]]
+==== Executor Overview
 
-[[node-listeners]]
-=== Event Listeners for Hazelcast Nodes
+The default implementation of this framework (`ThreadPoolExecutor`) is designed to run within a single JVM. In distributed systems, this implementation is not desired since you may want a task submitted in one JVM and processed in another one. Hazelcast offers `IExecutorService` for you to use in distributed environments: it implements `java.util.concurrent.ExecutorService` to serve the applications requiring computational and data processing power.
 
-Hazelcast offers the following event listeners:
+With `IExecutorService`, you can execute tasks asynchronously and perform other useful tasks. If your task execution takes longer than expected, you can cancel the task execution. In the Java Executor framework, tasks are implemented as `java.util.concurrent.Callable` and `java.util.Runnable`. If you need to return a value and submit to Executor, use Callable. Otherwise, use Runnable (if you do not need to return a value). Tasks should be `Serializable` since they will be distributed.
 
-* *Membership Listener* for cluster membership events.
-* *Distributed Object Listener* for distributed object creation and destroy events.
-* *Migration Listener* for partition migration start and complete events.
-* *Lifecycle Listener* for `HazelcastInstance` lifecycle events.
-* *Entry Listener* for `IMap` and `MultiMap` entry events (please refer to the <<map-listener, Map Listener section>>).
-* *Item Listener* for `IQueue`, `ISet` and `IList` item events (please refer to the Registering Events parts of the sections <<set, Set>> and <<list, List>>).
-* *Message Listener* for `ITopic` message events.
-* *Client Listener* for client connection events.
+[[callable]]
+===== Callable
 
-[[membership-listener]]
-==== Membership Listener
-
-The Membership Listener allows to get notified for the following events.
-
-* A new member is added to the cluster.
-* An existing member leaves the cluster.
-* An attribute of a member is changed. Please refer to the <<member-attributes, Member Attributes section>> to learn about member attributes.
-
-The following is an example Membership Listener class.
+Below is a sample Callable.
 
 ```java
-public class ClusterMembershipListener
-     implements MembershipListener {
-     
-public void memberAdded(MembershipEvent membershipEvent) {
-  System.err.println("Added: " + membershipEvent);
-}
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.HazelcastInstanceAware;
+import com.hazelcast.core.IMap;
 
-public void memberRemoved(MembershipEvent membershipEvent) {
-       System.err.println("Removed: " + membershipEvent);
-     }
+import java.io.Serializable;
+import java.util.concurrent.Callable;
 
-public void memberAttributeChanged(MemberAttributeEvent memberAttributeEvent) {
-       System.err.println("Member attribute changed: " + memberAttributeEvent);
-     }
-     
+public class SumTask
+    implements Callable<Integer>, Serializable, HazelcastInstanceAware {
+        
+  private transient HazelcastInstance hazelcastInstance;
+
+  public void setHazelcastInstance( HazelcastInstance hazelcastInstance ) {
+    this.hazelcastInstance = hazelcastInstance;
+  }
+
+  public Integer call() throws Exception {
+    IMap<String, Integer> map = hazelcastInstance.getMap( "map" );
+    int result = 0;
+    for ( String key : map.localKeySet() ) {
+      System.out.println( "Calculating for key: " + key );
+      result += map.get( key );
+    }
+    System.out.println( "Local Result: " + result );
+    return result;
+  }
 }
 ```
 
-When a respective event is fired, the membership listener outputs the addresses of the members that joined and left, and also which attribute changed on which member.
-
-[[distributed-object-listener]]
-==== Distributed Object Listener
-
-The Distributed Object Listener notifies when a distributed object is created or destroyed throughout the cluster.
-
-The following is an example Distributed Object Listener class.
-
+To execute a task with the executor framework, you obtain an `ExecutorService` instance (generally via `Executors`) and you submit a task which returns a `Future`. After executing the task, you do not have to wait for the execution to complete, you can process other things. When ready, you use the `Future` object to retrieve the result as shown in the code example below.
 
 ```java
-public class Sample implements DistributedObjectListener {
-  public static void main(String[] args) {
-    Sample sample = new Sample();
+ExecutorService executorService = Executors.newSingleThreadExecutor();
+Future<String> future = executorService.submit( new Echo( "myinput" ) );
+//while it is executing, do some useful stuff
+//when ready, get the result of your execution
+String result = future.get();
+```
 
-    Config config = new Config();
-    HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance(config);
-    hazelcastInstance.addDistributedObjectListener(sample);
+Please note that the Echo callable in the above code sample also implements a Serializable interface, since it may be sent to another JVM to be processed.
 
-    Collection<DistributedObject> distributedObjects = hazelcastInstance.getDistributedObjects();
-    for (DistributedObject distributedObject : distributedObjects) {
-      System.out.println(distributedObject.getName() + "," + distributedObject.getId());
-    }
+NOTE: When a task is deserialized, HazelcastInstance needs to be accessed. To do this, the task should implement `HazelcastInstanceAware` interface. Please see the <<hazelcastinstanceaware-interface, HazelcastInstanceAware Interface section>> for more information.
+
+[[runnable]]
+===== Runnable
+
+Let's see example code that is Runnable. Below is a task that waits for some time and echoes a message.
+
+```java
+public class EchoTask implements Runnable, Serializable {
+  private final String msg;
+
+  public EchoTask( String msg ) {
+    this.msg = msg;
   }
 
   @Override
-  public void distributedObjectCreated(DistributedObjectEvent event) {
-    DistributedObject instance = event.getDistributedObject();
-    System.out.println("Created " + instance.getName() + "," + instance.getId());
-  }
-
-  @Override
-  public void distributedObjectDestroyed(DistributedObjectEvent event) {
-    DistributedObject instance = event.getDistributedObject();
-    System.out.println("Destroyed " + instance.getName() + "," + instance.getId());
-  }
-}
-```
-
-When a respective event is fired, the distributed object listener outputs the event type, and the name, service (for example, if a Map service provides the distributed object, than it is a Map object), and ID of the object.
-
-[[migration-listener]]
-==== Migration Listener
-
-The Migration Listener notifies for the following events:
-
-* A partition migration is started.
-* A partition migration is completed.
-* A partition migration is failed.
-
-
-The following is an example Migration Listener class.
-
-
-```java
-public class ClusterMigrationListener implements MigrationListener {
-     @Override
-     public void migrationStarted(MigrationEvent migrationEvent) {
-       System.err.println("Started: " + migrationEvent);
-     }
-    @Override
-     public void migrationCompleted(MigrationEvent migrationEvent) {
-       System.err.println("Completed: " + migrationEvent);
-     }
-     @Override
-     public void migrationFailed(MigrationEvent migrationEvent) {
-       System.err.println("Failed: " + migrationEvent);
-     }
-}     
-```
-
-When a respective event is fired, the migration listener outputs the partition ID, status of the migration, the old member and the new member. The following is an example output.
-
-```
-Started: MigrationEvent{partitionId=98, oldOwner=Member [127.0.0.1]:5701,
-newOwner=Member [127.0.0.1]:5702 this} 
-```
-
-[[lifecycle-listener]]
-==== Lifecycle Listener
-
-The Lifecycle Listener notifies for the following events:
-
-* A member is starting.
-* A member started.
-* A member is shutting down.
-* A member's shutdown has completed.
-* A member is merging with the cluster.
-* A member's merge operation has completed.
-* A Hazelcast Client connected to the cluster.
-* A Hazelcast Client disconnected from the cluster.
-
-
-The following is an example Lifecycle Listener class.
-
-
-```java
-public class NodeLifecycleListener implements LifecycleListener {
-     @Override
-     public void stateChanged(LifecycleEvent event) {
-       System.err.println(event);
-     }
-}
-```
-
-This listener is local to an individual node. It notifies the application that uses Hazelcast about the events mentioned above for a particular node. 
-
-[[item-listener]]
-==== Item Listener
-
-The Item Listener is used by the Hazelcast `IQueue`, `ISet` and `IList` interfaces. It notifies when an item is added or removed.
-
-The following is an example Item Listener class.
-
-
-```java
-public class Sample implements ItemListener {
-
-  public static void main( String[] args ) { 
-    Sample sample = new Sample();
-    HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance();
-    ISet<Price> set = hazelcastInstance.getSet( "default" );
-    set.addItemListener( sample, true ); 
-
-    Price price = new Price( 10, time1 )
-    set.add( price );
-    set.remove( price );
-  } 
-
-  public void itemAdded( Object item ) {
-    System.out.println( "Item added = " + item );
-  }
-
-  public void itemRemoved( Object item ) {
-    System.out.println( "Item removed = " + item );
-  }     
-}
-```
-
-[[message-listener]]
-==== Message Listener
-
-The Message Listener is used by the `ITopic` interface. It notifies when a message is received for the registered topic.
-
-The following is an example Message Listener class.
-
-
-```java
-public class Sample implements MessageListener<MyEvent> {
-
-  public static void main( String[] args ) {
-    Sample sample = new Sample();
-    HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance();
-    ITopic topic = hazelcastInstance.getTopic( "default" );
-    topic.addMessageListener( sample );
-    topic.publish( new MyEvent() );
-  }
-
-  public void onMessage( Message<MyEvent> message ) {
-    MyEvent myEvent = message.getMessageObject();
-    System.out.println( "Message received = " + myEvent.toString() );
-    if ( myEvent.isHeavyweight() ) {
-      messageExecutor.execute( new Runnable() {
-          public void run() {
-            doHeavyweightStuff( myEvent );
-          }
-      } );
+  public void run() {
+    try {
+      Thread.sleep( 5000 );
+    } catch ( InterruptedException e ) {
     }
+    System.out.println( "echo:" + msg );
   }
+}
 ```
 
-[[client-listener]]
-==== Client Listener
+Now let's write a class that submits and executes echo messages. Executor is retrieved from `HazelcastInstance` and 1000 echo tasks are submitted.
 
-The Client Listener is used by the Hazelcast nodes. It notifies the nodes when a client is connected to or disconnected from the cluster.
+```java
+public class MasterMember {
+  public static void main( String[] args ) throws Exception {
+    HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance();
+    IExecutorService executor = hazelcastInstance.getExecutorService( "exec" );
+    for ( int k = 1; k <= 1000; k++ ) {
+      Thread.sleep( 1000 );
+      System.out.println( "Producing echo task: " + k );
+      executor.execute( new EchoTask( String.valueOf( k ) ) );
+    }
+    System.out.println( "EchoTaskMain finished!" );
+  }
+}
+```
 
+[[executor-thread-configuration]]
+===== Executor Thread Configuration
 
-NOTE: You can also add event listeners to a Hazelcast client. Please refer to <<client-listenerconfig, Client Listenerconfig>> for the related information.
+By default, Executor is configured to have 8 threads in the pool. You can change that with the `pool-size` property in the declarative configuration (`hazelcast.xml`). An example is shown below (using the above Executor).
 
-[[client-listeners]]
-=== Event Listeners for Hazelcast Clients
-
-You can add event listeners to a Hazelcast Java client. You can configure the following listeners to listen to the events on the client side. Please see the respective sections under the <<node-listeners, Event Listeners for Hazelcast Nodes section>> for example code.
-
-
-* *Lifecycle Listener*: Notifies when the client is starting, started, shutting down and shutdown.
-* *Membership Listener*: Notifies when a node joins to/leaves the cluster to which the client is connected, or when an attribute is changed in a node.
-* *DistributedObject Listener*: Notifies when a distributed object is created or destroyed throughout the cluster to which the client is connected.
-
-*_RELATED INFORMATION_*
-
-_Please refer to the <<client-listenerconfig, Client Listenerconfig section>> for more information._
+```xml
+<executor-service name="exec">
+  <pool-size>1</pool-size>
+</executor-service>
+```
 
 
 *_RELATED INFORMATION_*
 
-_Please refer to the <<listener-configurations, Listener Configurations section>> for a configuration wrap-up of event listeners._
+_Please refer to the <<executor-service-configuration, Executor Service Configuration section>> for a full description of Hazelcast Distributed Executor Service configuration._
 
+[[scaling]]
+===== Scaling
 
+Executor service can be scaled both vertically (scale up) and horizontally (scale out).
 
+To scale up, you should improve the processing capacity of the JVM. You can do this by increasing the `pool-size` property mentioned in the <<executor-thread-configuration, Executor Thread Configuration section>> (i.e., increasing the thread count). 
+
+However, please be aware of your JVM's capacity. If you think it cannot handle such an additional load caused by increasing the thread count, you may want to consider improving the JVM's resources (CPU, memory, etc.). As an example, set the `pool-size` to 5 and run the above `MasterMember`. You will see that `EchoTask` is run as soon as it is produced.
+
+To scale out, more JVMs should be added instead of increasing only one JVM's capacity. In reality, you may want to expand your cluster by adding more physical or virtual machines. For the EchoTask example in the <<runnable, Runnable section>>, you can create another Hazelcast instance. That instance will automatically get involved in the executions started in `MasterMember` and start processing.

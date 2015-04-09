@@ -80,3 +80,6 @@ include::05DDS/ReplicatedMap/ReplicatedMapConfiguration.adoc[]
 include::05DDS/ReplicatedMap/ReplicatedMapEntryListener.adoc[]
 include::06DistributedEvents/DistributedEvents.adoc[]
 include::06DistributedEvents/GlobalEventConfiguration.adoc[]
+include::07DistributedComputing/DistributedComputing.adoc[]
+include::07DistributedComputing/Execution.adoc[]
+
