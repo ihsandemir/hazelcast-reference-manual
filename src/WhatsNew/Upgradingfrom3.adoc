@@ -1,0 +1,12 @@
+
+[[upgrading-from-3-x]]
+==== Upgrading from 3.x
+
+
+In this section, we list the changes what users should take into account before upgrading to latest Hazelcast from 3.x versions.
+
+- **Introducing the `spring-aware` element:**
+By default, Hazelcast uses `SpringManagedContext` to scan `SpringAware` annotations. This may cause some performance penalties even if the users do not use `SpringAware`. 
+By introducing the `spring-aware` element, now it is possible to disable it by adding the `<hz:spring-aware enabled="false"/>` tag to the configuration. Please see the <<spring-integration, Spring Integration section>>.
+
+

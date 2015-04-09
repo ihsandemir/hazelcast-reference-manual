@@ -1,0 +1,31 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
+        classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.6'
+    }
+}
+
+apply plugin: 'org.asciidoctor.convert'
+
+asciidoctor{
+    sourceDir 'src'
+    outputDir 'target'
+    sourceDocumentNames =["book.adoc"]
+    // uncomment to generate pdf
+    // backend 'pdf'
+    options = [
+            doctype: 'book',
+            attributes: [
+                //'source-highlighter': 'coderay',
+                'source-highlighter': 'highlightjs',
+                'highlightjs-theme' : 'solarized_light',
+                toc                 : 'left',
+                idprefix            : '',
+                idseparator         : '-'
+            ]
+        ]
+}

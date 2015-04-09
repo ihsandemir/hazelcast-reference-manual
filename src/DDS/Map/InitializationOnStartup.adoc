@@ -1,0 +1,21 @@
+
+
+[[initialization-on-startup]]
+===== Initialization On Startup
+
+You can use the `MapLoader.loadAllKeys` API to pre-populate the in-memory map when the map is first touched/used. If `MapLoader.loadAllKeys` returns NULL then nothing will be loaded. Your `MapLoader.loadAllKeys` implementation can return all or some of the keys. For example, you may select and return only the `hot` keys. `MapLoader.loadAllKeys` is the fastest way of pre-populating the map since Hazelcast will optimize the loading process by having each node loading its owned portion of the entries.
+
+The `InitialLoadMode` configuration parameter in the class https://github.com/hazelcast/hazelcast/blob/5f4f6a876e572f91431ad22f01ad5af9f5837f72/hazelcast/src/main/java/com/hazelcast/config/MapStoreConfig.java[MapStoreConfig] has two values: `LAZY` and `EAGER`. 
+
+If `InitialLoadMode` is set to `LAZY`, data is not loaded during the map creation. If it is set to `EAGER`, the whole data is loaded while the map is created and everything becomes ready to use. Also, if you add indices to your map with the https://github.com/hazelcast/hazelcast/blob/da5cceee74e471e33f65f43f31d891c9741e31e3/hazelcast/src/main/java/com/hazelcast/config/MapIndexConfig.java[MapIndexConfig] class or the <<indexing, addIndex>> method, then `InitialLoadMode` is overridden and `MapStoreConfig` behaves as if `EAGER` mode is on.
+
+Here is the `MapLoader` initialization flow:
+
+1. When `getMap()` is first called from any node, initialization will start depending on the value of `InitialLoadMode`. If it is set to `EAGER`, initialization starts.  If it is set to `LAZY`, initialization does not start but data is loaded each time a partition loading completes.
+2. Hazelcast will call `MapLoader.loadAllKeys()` to get all your keys on each node.
+3. Each node will figure out the list of keys it owns.
+4. Each node will load all its owned keys by calling `MapLoader.loadAll(keys)`.
+5. Each node puts its owned entries into the map by calling `IMap.putTransient(key,value)`.
+
+NOTE: If the load mode is `LAZY` and when the `clear()` method is called (which triggers `MapStore.deleteAll()`), Hazelcast will remove *ONLY* the loaded entries from your map and datastore. Since the whole data is not loaded for this case (`LAZY` mode), please note that there may be still entries in your datastore.
+

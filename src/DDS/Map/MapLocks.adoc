@@ -1,0 +1,34 @@
+
+
+[[map-locks]]
+==== Map Locks
+
+Hazelcast Distributed Map (IMap) is thread-safe to meet your thread safety requirements. When these requirements increase or you want to have more control on the concurrency, consider the following Hazelcast features and solutions.
+
+Let's work on a sample case as shown below.
+
+```java
+public class RacyUpdateMember {
+    public static void main( String[] args ) throws Exception {
+        HazelcastInstance hz = Hazelcast.newHazelcastInstance();
+        IMap<String, Value> map = hz.getMap( "map" );
+        String key = "1";
+        map.put( key, new Value() );
+        System.out.println( "Starting" );
+        for ( int k = 0; k < 1000; k++ ) {
+            if ( k % 100 == 0 ) System.out.println( "At: " + k );
+            Value value = map.get( key );
+            Thread.sleep( 10 );
+            value.amount++;
+            map.put( key, value );
+        }
+        System.out.println( "Finished! Result = " + map.get(key).amount );
+    }
+
+    static class Value implements Serializable {
+        public int amount;
+    }
+}
+```
+
+If the above code is run by more than one cluster member simultaneously, there will be likely a race condition. You can solve this with Hazelcast.

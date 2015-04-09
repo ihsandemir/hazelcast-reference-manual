@@ -1,0 +1,51 @@
+
+
+[[write-behind]]
+===== Write Behind
+
+You can configure `MapStore` as write-behind by setting the `write-delay-seconds` property to a value bigger than *0*. This means the modified entries will be put to the data store asynchronously after a configured delay. 
+
+NOTE: In write-behind mode, by default Hazelcast coalesces updates on a specific key, i.e. applies only the last update on it. But, you can set `MapStoreConfig#setWriteCoalescing` to `FALSE` and you can store all updates performed on a key to the data store.
+
+NOTE: When you set `MapStoreConfig#setWriteCoalescing` to `FALSE`, after you reached per-node maximum write-behind-queue capacity, subsequent put operations will fail with `ReachedMaxSizeException`. This exception will be thrown to prevent uncontrolled grow of write-behind queues. You can set per node maximum capacity with `GroupProperty#MAP_WRITE_BEHIND_QUEUE_CAPACITY`.
+
+
+In this mode, when the `map.put(key,value)` call returns:
+
+* In-Memory entry is updated.
+* In-Memory backup copies are successfully created on other JVMs (if `backup-count` is greater than 0).
+* The entry is marked as dirty so that after `write-delay-seconds`, it can be persisted with `MapStore.store(key,value)` call.
+* For fault tolerance dirty entries are stored in a queue on the primary member and also on a back-up member.
+
+The same behavior goes for the `map.remove(key)`, the only difference is that  `MapStore.delete(key)` is called when the entry will be deleted.
+
+If `MapStore` throws an exception, then Hazelcast tries to store the entry again. If the entry still cannot be stored, a log message is printed and the entry is re-queued. 
+
+For batch write operations, which are only allowed in write-behind mode, Hazelcast will call `MapStore.storeAll(map)` and `MapStore.deleteAll(collection)` to do all writes in a single call.
+
+NOTE: If a map entry is marked as dirty, i.e. it is waiting to be persisted to the `MapStore` in a write-behind scenario, the eviction process forces the entry to be stored. By this way, you will have control on the number of entries waiting to be stored, and thus you can prevent a possible OutOfMemory exception.
+
+
+
+WARNING: `MapStore` or `MapLoader` implementations should not use Hazelcast Map/Queue/MultiMap/List/Set operations. Your implementation should only work with your data store. Otherwise, you may get into deadlock situations.
+
+Here is a sample configuration:
+
+```xml
+<hazelcast>
+  ...
+  <map name="default">
+    ...
+    <map-store enabled="true">
+      <class-name>com.hazelcast.examples.DummyStore</class-name>
+      <write-delay-seconds>60</write-delay-seconds>
+      <write-batch-size>1000</write-batch-size>
+      <write-coalescing>true</write-coalescing>
+    </map-store>
+  </map>
+</hazelcast>
+```
+
+*_RELATED INFORMATION_*
+
+_Please refer to the <<map-store, Map Store section>> for the full Map Store configuration description._

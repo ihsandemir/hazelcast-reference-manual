@@ -1,0 +1,31 @@
+
+
+[[forcing-all-keys-to-be-loaded]]
+===== Forcing All Keys To Be Loaded
+
+The method `loadAll` loads some or all keys into a data store in order to optimize the multiple load operations. The method has two signatures (i.e. the same method can take two different parameter lists). One signature loads the given keys and the other loads all keys. Please see the sample code below.
+
+
+```java
+public class LoadAll {
+
+    public static void main(String[] args) {
+        final int numberOfEntriesToAdd = 1000;
+        final String mapName = LoadAll.class.getCanonicalName();
+        final Config config = createNewConfig(mapName);
+        final HazelcastInstance node = Hazelcast.newHazelcastInstance(config);
+        final IMap<Integer, Integer> map = node.getMap(mapName);
+       
+        populateMap(map, numberOfEntriesToAdd);
+        System.out.printf("# Map store has %d elements\n", numberOfEntriesToAdd);
+   
+        map.evictAll();
+        System.out.printf("# After evictAll map size\t: %d\n", map.size());
+        
+        map.loadAll(true);
+        System.out.printf("# After loadAll map size\t: %d\n", map.size());
+    }
+}
+```
+
+

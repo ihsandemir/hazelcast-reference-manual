@@ -1,0 +1,7 @@
+
+
+[[read-through]]
+===== Read Through
+
+If an entry does not exist in the memory when an application asks for it, Hazelcast asks your loader implementation to load that entry from the data store.  If the entry exists there, the loader implementation gets it, hands it to Hazelcast, and Hazelcast puts it into the memory. This is read-through persistence mode.
+

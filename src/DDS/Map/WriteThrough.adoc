@@ -1,0 +1,17 @@
+
+
+[[write-through]]
+===== Write Through
+
+`MapStore` can be configured to be write-through by setting the `write-delay-seconds` property to *0*. This means the entries will be put to the data store synchronously.
+
+In this mode, when the `map.put(key,value)` call returns:
+
+* `MapStore.store(key,value)` is successfully called so the entry is persisted.
+* In-Memory entry is updated.
+* In-Memory backup copies are successfully created on other JVMs (if `backup-count` is greater than 0).
+
+The same behavior goes for a `map.remove(key)` call. The only difference is that  `MapStore.delete(key)` is called when the entry will be deleted.
+
+If `MapStore` throws an exception, then the exception will be propagated back to the original `put` or `remove` call in the form of `RuntimeException`. 
+

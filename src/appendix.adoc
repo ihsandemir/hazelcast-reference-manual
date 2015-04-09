@@ -1,0 +1,56 @@
+ifndef::imagesdir[:imagesdir: images]
+
+[[appendix]]
+== Appendix
+
+[[hazelcast-on-ec2-tutorial]]
+=== Hazelcast on EC2 Tutorial
+
+This is a step-by-step tutorial on how to configure a very basic Hazelcast
+cluster inside Amazon EC2. This tutorial expects that you have ssh
+available (on Windows you can use Putty) and that you have an Amazon EC2
+account. You also need to have your Amazon access key and secret key. The
+access key should look similar to this:
+
+BNELSKS9B8LDLE8NXKKA
+
+And your secret key should look similar to this:
+
+384c32KDLLDM44l3l3lddudueIEEL/Uldlx395uM
+
+First, we login to the management console. For example:
+
+https://console.aws.amazon.com/ec2/v2/home?region=eu-west-1.
+
+There, we press the ``Launch Instance'' button.
+
+image::ec2-0.png[image,scaledwidth="85%"]
+
+<<<
+Select ’classic wizard’.
+
+image::ec2-1.png[image,scaledwidth="85%"]
+
+<<<
+Select ’Ubuntu Server 12.10’.
+
+image::ec2-2.png[image,scaledwidth="85%"]
+
+<<<
+We are going to create two ubuntu servers at once. Enter 2 for «Number of instances» and press the continue button.
+
+image::ec2-3.png[image,scaledwidth="85%"]
+
+image::ec2-4.png[image,scaledwidth="85%"]
+
+image::ec2-5.png[image,scaledwidth="85%"]
+
+image::ec2-6.png[image,scaledwidth="85%"]
+
+image::ec2-7.png[image,scaledwidth="85%"]
+
+image::ec2-8.png[image,scaledwidth="85%"]
+
+image::ec2-9.png[image,scaledwidth="85%"]
+
+image::ec2-10.png[image,scaledwidth="85%"]

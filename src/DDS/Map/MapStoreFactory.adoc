@@ -1,0 +1,45 @@
+
+
+[[map-store-factory]]
+===== MapStoreFactory And MapLoaderLifecycleSupport Interfaces
+
+A configuration can be applied to more than one map using wildcards (see <<using-wildcard, Using Wildcard>>), meaning that the configuration is shared among the maps. But `MapStore` does not know which entries to store when there is one configuration applied to multiple maps. To overcome this, Hazelcast provides the `MapStoreFactory` interface.
+
+Using the `MapStoreFactory` interface, `MapStore`s for each map can be created when a wildcard configuration is used. Sample code is shown below.
+
+```java
+Config config = new Config();
+MapConfig mapConfig = config.getMapConfig( "*" );
+MapStoreConfig mapStoreConfig = mapConfig.getMapStoreConfig();
+mapStoreConfig.setFactoryImplementation( new MapStoreFactory<Object, Object>() {
+  @Override
+  public MapLoader<Object, Object> newMapStore( String mapName, Properties properties ) {
+    return null;
+  }
+});
+```
+
+If the configuration implements the `MapLoaderLifecycleSupport` interface, then the user can initialize the `MapLoader` implementation with the given map name, configuration properties, and the Hazelcast instance. See the following example code.
+
+```java
+public interface MapLoaderLifecycleSupport {
+
+  /**
+   * Initializes this MapLoader implementation. Hazelcast will call
+   * this method when the map is first used on the
+   * HazelcastInstance. Implementation can
+   * initialize required resources for the implementing
+   * mapLoader such as reading a config file and/or creating
+   * database connection.
+   */
+  void init( HazelcastInstance hazelcastInstance, Properties properties, String mapName );
+
+  /**
+   * Hazelcast will call this method before shutting down.
+   * This method can be overridden to cleanup the resources
+   * held by this map loader implementation, such as closing the
+   * database connections etc.
+   */
+  void destroy();
+}
+```

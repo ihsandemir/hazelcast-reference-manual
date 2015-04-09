@@ -1,0 +1,14 @@
+
+[[debugging]]
+==== Debugging
+
+When needed, Hazelcast can log the events for the instances that exist in a region. To see what has happened or to trace the activities while forming the cluster, change the log level in your logging mechanism to `FINEST` or `DEBUG`. After this change, you can also see in the generated log whether the instances are accepted or rejected, and the reason the instances were rejected. Note that changing the log level in this way may affect the performance of the cluster. Please see the <<logging-configuration, Logging Configuration section>> for information on logging mechanisms.
+
+
+*_RELATED INFORMATION_*
+
+_You can download the white paper *"Hazelcast on AWS: Best Practices for Deployment"* from http://hazelcast.com/resources/hazelcast-on-aws-best-practices-for-deployment/[Hazelcast.com]._
+
+
+
+

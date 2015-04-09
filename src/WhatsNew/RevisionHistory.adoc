@@ -1,0 +1,57 @@
+
+[[revision-history]]
+=== Document Revision History
+
+[cols=“1,1,2”, options="header"] 
+
+|===
+|Chapter|Section|Description
+
+|<<preface, Chapter 1 - Preface>>
+|
+|Added information on how to contribute to Hazelcast.
+
+|<<what-is-new, Chapter 2 - What's New in Hazelcast 3.5>>
+|<<upgrading-from-3-x, Upgrading from 3.x>>
+|Added as a new section.
+
+.2+|<<overview, Chapter 4 - Overview>>
+||Separated from <<getting-started, Getting Started>> as a new chapter.
+|<<data-partitioning, Data Partitioning>>
+|Added as a new section explaining how the partitioning works in Hazelcast.
+
+|<<hazelcast-clusters, Chapter 5 - Hazelcast Clusters>>
+|<<creating-cluster-groups, Creating Cluster Groups>>
+|Added as a new section explaining how to separate a Hazelcast cluster.
+
+.2+|<<distributed-data-structures, Chapter 6 - Distributed Data Structures>>
+|<<map, Map>>
+|The content of the section, previously read as Entry Listener improved and its name changed to <<map-listener, Map Listener>>.
+
+Description of the new element `write-coalescing` added to the <<write-behind, Write-Behind section>>. 
+|<<replicated-map, Replicated Map>>|<<replicated-map-configuration, Replicated Map Configuration>> added as a new section explaining the configuration elements.
+
+|<<distributed-events, Chapter 7 - Distributed Events>>||The whole chapter improved by adding sections describing each listener.
+
+|<<distributed-computing, Chapter 8 - Distributed Computing>>|<<execution-member-selector, Execution Member Selector>>|Added as a new section explaining how to select a cluster member on which an execution will be performed.
+
+|<<integrated-clustering, Chapter 13 - Integrated Clustering>>||Added introduction paragraphs.
+
+|<<clients, Chapter 15 - Clients>>||Added introduction paragraphs.
+
+|<<security, Chapter 18 - Security>>|<<clusterloginmodule, ClusterLoginModule>>|The <<enterprise-integration, Enterprise Integration section>> added .
+
+|<<performance, Chapter 19 - Performance>>|<<hazelcast-performance-on-aws, Hazelcast Performance on AWS>>|Added as a new section that provides best practices to improve the Hazelcast performance on Amazon Web Service.
+
+|<<hazelcast-simulator, Chapter 20 - Hazelcast Simulator>>||Added as a new chapter providing comprehensive information on the Hazelcast Simulator feature.
+
+.2+|<<hazelcast-configuration, Chapter 22 - Hazelcast Configuration>>||Improved by adding missing configuration elements and attributes. Added introduction paragraphs to the chapter.
+|<<using-variables, Using Variables>>| Added as a new section explaining how to use variables in declarative configuration.
+
+|<<license-questions, Chapter 24 - License Questions>>||Added as a new chapter describing the license information of dependencies.
+
+|<<frequently-asked-questions, Chapter 25 - FAQ>>||Added new questions/answers.
+
+|<<glossary, Chapter 26 - Glossary>>||Added new glossary items.
+|===
+

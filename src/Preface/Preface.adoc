@@ -1,0 +1,81 @@
+[[preface]]
+== Preface
+
+Welcome to the Hazelcast Reference Manual. This manual includes concepts, instructions and samples to guide you on how to use Hazelcast and build Hazelcast applications.
+
+As the reader of this manual, you must be familiar with the Java programming language and you should have installed your preferred IDE.
+
+[[product-naming]]
+=== Product Naming
+
+Throughout this manual:
+
+- **Hazelcast** refers to the open source edition of Hazelcast in-memory data grid middleware. It is also the name of the company providing the Hazelcast product.
+- **Hazelcast Enterprise** refers to the commercial edition of Hazelcast.
+
+
+[[licensing]]
+=== Licensing
+
+Hazelcast is free provided under the Apache 2 license. Hazelcast Enterprise is commercially licensed by Hazelcast, Inc.
+
+For more detailed information on licensing, please see the <<license-questions, License Questions appendix>>.
+
+[[trademarks]]
+=== Trademarks
+
+Hazelcast is a registered trademark of Hazelcast, Inc. All other trademarks in this manual are held by their respective owners. 
+
+[[customer-support]]
+=== Customer Support
+
+Support for Hazelcast is provided via https://github.com/hazelcast/hazelcast/issues[GitHub], https://groups.google.com/forum/#!forum/hazelcast[Mail Group] and http://www.stackoverflow.com[StackOverflow]. 
+
+For information on support for Hazelcast Enterprise, please see http://hazelcast.com/pricing/[hazelcast.com/pricing].
+
+[[contributing-to-hazelcast]]
+=== Contributing to Hazelcast
+
+You can contribute to the Hazelcast code, report a bug or request an enhancement. Please see the following resources.
+
+- https://hazelcast.atlassian.net/wiki/display/COM/Developing+with+Git[Developing with Git]: Document that explains the branch mechanism of Hazelcast and how to request changes.
+- https://hazelcast.atlassian.net/wiki/display/COM/Hazelcast+Contributor+Agreement[Hazelcast Contributor Agreement form]: Form that each contributing developer needs to fill and send back to Hazelcast.
+- https://github.com/hazelcast/hazelcast[Hazelcast on GitHub]: Hazelcast repository where the code is developed, issues and pull requests are managed.
+
+[[typographical-conventions]]
+=== Typographical Conventions
+
+Below table shows the conventions used in this manual.
+
+[cols="1,1", options="header"] 
+|===
+|Convention
+|Description
+
+|**bold font**
+|Indicates part of a sentence that require the reader's specific attention. 
+
+Also indicates property/parameter values.
+
+|_italic font_
+|When italicized words are enclosed with "<" and ">", indicates a variable in command or code syntax that you must replace, e.g. `hazelcast-<`*version*`>.jar`.
+
+Note and Related Information texts are in italics.
+
+|`monospace`
+|Indicates files, folders, class and library names, code snippets, and inline code words in a sentence.
+
+|*_RELATED INFORMATION_*
+|Indicates a resource that is relevant to the topic, usually with a link or cross-reference.
+
+|*_NOTE_*
+|Indicates information that is of special interest or importance, e.g. an additional action required only in certain circumstances.
+
+|element & attribute
+|Mostly used in the context of declarative configuration, i.e. configuration performed by the Hazelcast XML file.  
+
+Element refers to an XML tag used to configure a Hazelcast feature. Attribute is a parameter owned by an element, contributing into the declaration of that element's configuration. Please see the following example.
+`<port port-count="100">5701</port>`
+
+In this example, `port-count` is an **attribute** of the `port` **element**.
+|===
