@@ -88,6 +88,22 @@ include::07DistributedComputing/ExecutionMemberSelection.adoc[]
 include::07DistributedComputing/EntryProcessor.adoc[]
 include::07DistributedComputing/SampleEntryProcessorCode.adoc[]
 include::07DistributedComputing/AbstractEntryProcessor.adoc[]
+include::08DistributedQuery/Query/DistributedQuery.adoc[]
+include::08DistributedQuery/Query/CriteriaAPI.adoc[]
+include::08DistributedQuery/Query/DistributedSQLQuery.adoc[]
+include::08DistributedQuery/Query/PagingPredicate.adoc[]
+include::08DistributedQuery/Query/Indexing.adoc[]
+include::08DistributedQuery/Query/QueryThreadConfiguration.adoc[]
+include::08DistributedQuery/MapReduce/MapReduce.adoc[]
+include::08DistributedQuery/MapReduce/MapReduceEssentials.adoc[]
+include::08DistributedQuery/MapReduce/IntroductionToMapReduceAPI.adoc[]
+include::08DistributedQuery/MapReduce/HazelcastMapReduceArchitecture.adoc[]
+include::08DistributedQuery/Aggregators/Aggregators.adoc[]
+include::08DistributedQuery/Aggregators/IntroductionToAggregatorsAPI.adoc[]
+include::08DistributedQuery/Aggregators/AggregationsExample.adoc[]
+include::08DistributedQuery/Aggregators/ImplementingAggregations.adoc[]
+include::08DistributedQuery/ContinuousQuery/ContinuousQuery.adoc[]
+
 
 
 
