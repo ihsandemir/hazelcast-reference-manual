@@ -82,4 +82,13 @@ include::06DistributedEvents/DistributedEvents.adoc[]
 include::06DistributedEvents/GlobalEventConfiguration.adoc[]
 include::07DistributedComputing/DistributedComputing.adoc[]
 include::07DistributedComputing/Execution.adoc[]
+include::07DistributedComputing/ExecutionCancellation.adoc[]
+include::07DistributedComputing/ExecutionCallback.adoc[]
+include::07DistributedComputing/ExecutionMemberSelection.adoc[]
+include::07DistributedComputing/EntryProcessor.adoc[]
+include::07DistributedComputing/SampleEntryProcessorCode.adoc[]
+include::07DistributedComputing/AbstractEntryProcessor.adoc[]
+
+
+
 
