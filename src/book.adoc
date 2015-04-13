@@ -137,7 +137,7 @@ include::12IntegratedClustering/SpringSecuritySupport.adoc[]
 include::12IntegratedClustering/TomcatBased.adoc[]
 include::12IntegratedClustering/JettyBased.adoc[]
 include::12IntegratedClustering/SpringIntegration.adoc[]
-
+include::13Storage/Storage.adoc[]
 
 
 
