@@ -120,9 +120,16 @@ include::10Transactions/ResourceAdapterConfiguration.adoc[]
 include::10Transactions/SampleGlassfish.adoc[]
 include::10Transactions/SampleJBossAS5.adoc[]
 include::10Transactions/SampleJBossAS7.adoc[]
-include::11HazelcastJCache/JCache.adoc[]
-
-
+include::11HazelcastJCache/Overview.adoc[]
+include::11HazelcastJCache/SetupAndConfiguration.adoc[]
+include::11HazelcastJCache/QuickExample.adoc[]
+include::11HazelcastJCache/Configuration.adoc[]
+include::11HazelcastJCache/Providers.adoc[]
+include::11HazelcastJCache/ClientProvider.adoc[]
+include::11HazelcastJCache/ServerProvider.adoc[]
+include::11HazelcastJCache/IntroductionToJCacheAPI.adoc[]
+include::11HazelcastJCache/ICache.adoc[]
+include::11HazelcastJCache/JCacheSpecificationCompliance.adoc[]
 
 
 
