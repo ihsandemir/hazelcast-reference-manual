@@ -1,0 +1,15 @@
+[[integrated-clustering]]
+== Integrated Clustering
+
+In this chapter, we show you how Hazelcast is integrated with Hibernate 2nd level cache and Spring, and how Hazelcast helps with your Filter, Tomcat and Jetty based web session replications.
+
+The <<hibernate-second-level-cache, Hibernate Second Level Cache section>> tells how you should configure Hazelcast and Hibernate to integrate them. It explains the modes of Hazelcast that can be used by Hibernate and also provides how to perform advanced settings like accessing the underlying HazelcastInstance used by Hibernate.
+
+The <<web-session-replication, Web Session Replication section>> provides information on how to cluster user HTTP sessions automatically. Also, you can learn how to enable session replication for JEE web applications with Tomcat and Jetty containers. Please note that Tomcat and Jetty based web session replications are Hazelcast Enterprise only modules.
+
+The <<spring-integration, Spring Integration section>> tells how you can integrate Hazelcast into a Spring project by explaining the Hazelcast instance and client configurations with the _hazelcast_ namespace. It also lists the supported Spring bean attributes. 
+
+
+
+
+

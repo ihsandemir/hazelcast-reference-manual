@@ -130,8 +130,13 @@ include::11HazelcastJCache/ServerProvider.adoc[]
 include::11HazelcastJCache/IntroductionToJCacheAPI.adoc[]
 include::11HazelcastJCache/ICache.adoc[]
 include::11HazelcastJCache/JCacheSpecificationCompliance.adoc[]
-
-
+include::12IntegratedClustering/IntegratedClustering.adoc[]
+include::12IntegratedClustering/Hibernate.adoc[]
+include::12IntegratedClustering/WebSessionReplication.adoc[]
+include::12IntegratedClustering/SpringSecuritySupport.adoc[]
+include::12IntegratedClustering/TomcatBased.adoc[]
+include::12IntegratedClustering/JettyBased.adoc[]
+include::12IntegratedClustering/SpringIntegration.adoc[]
 
 
 
