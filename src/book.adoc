@@ -1,6 +1,6 @@
 :doctype: book
 :toc: macro
-:toclevels: 5
+:toclevels: 3
 ifndef::imagesdir[:imagesdir: images]
 :front-cover-image: images/cover.png
 :icons: font
@@ -103,6 +103,27 @@ include::08DistributedQuery/Aggregators/IntroductionToAggregatorsAPI.adoc[]
 include::08DistributedQuery/Aggregators/AggregationsExample.adoc[]
 include::08DistributedQuery/Aggregators/ImplementingAggregations.adoc[]
 include::08DistributedQuery/ContinuousQuery/ContinuousQuery.adoc[]
+include::09UserDefinedServices/UserDefinedServices.adoc[]
+include::09UserDefinedServices/CreatingClass.adoc[]
+include::09UserDefinedServices/EnablingClass.adoc[]
+include::09UserDefinedServices/AddingProperties.adoc[]
+include::09UserDefinedServices/StartingService.adoc[]
+include::09UserDefinedServices/PlacingARemoteCall.adoc[]
+include::09UserDefinedServices/CreatingContainers.adoc[]
+include::09UserDefinedServices/PartitionMigration.adoc[]
+include::09UserDefinedServices/CreatingBackups.adoc[]
+include::09UserDefinedServices/WaitNotifyService.adoc[]
+include::10Transactions/Transactions.adoc[]
+include::10Transactions/XATransactions.adoc[]
+include::10Transactions/J2EEIntegration.adoc[]
+include::10Transactions/ResourceAdapterConfiguration.adoc[]
+include::10Transactions/SampleGlassfish.adoc[]
+include::10Transactions/SampleJBossAS5.adoc[]
+include::10Transactions/SampleJBossAS7.adoc[]
+include::11HazelcastJCache/JCache.adoc[]
+
+
+
 
 
 
