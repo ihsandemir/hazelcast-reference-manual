@@ -1,0 +1,578 @@
+
+[[clustered-rest]]
+=== Clustered REST
+
+image::enterprise-onlycopy.jpg[]
+
+The Clustered REST API is exposed from Management Center to allow you to monitor clustered statistics of distributed objects.
+
+[[enabling-clustered-rest]]
+==== Enabling Clustered REST
+
+To enable Clustered REST on your Management Center, pass the following system property at startup. This property is disabled by default.
+
+```plain
+-Dhazelcast.mc.rest.enabled=true
+```
+
+[[clustered-rest-api-root]]
+==== Clustered REST API Root 
+
+The entry point for Clustered REST API is `/rest/`.
+
+This resource does not have any attributes.
+
+[[clusters-resource]]
+==== Clusters Resource
+
+This resource returns a list of clusters that are connected to the Management Center.
+
+===== Retrieve Clusters
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters
+```
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+["dev","qa"]
+```
+	
+[[cluster-resource]]
+==== Cluster Resource
+
+This resource returns information related to the provided cluster name.
+
+===== Retrieve Cluster Information
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/
+```
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+{"masterAddress":"192.168.2.78:5701"}
+```
+
+==== Members Resource
+
+This resource returns a list of members belonging to the provided clusters.
+
+===== Retrieve Members [GET] [/rest/clusters/{clustername}/members]
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/members`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/members
+```
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+["192.168.2.78:5701","192.168.2.78:5702","192.168.2.78:5703","192.168.2.78:5704"]
+```
+
+[[member-resource]]
+==== Member Resource
+
+This resource returns information related to the provided member.
+
+===== Retrieve Member Information
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/members/{member}`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/members/192.168.2.78:5701
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+{
+   "cluster":"dev",
+   "name":"192.168.2.78:5701",
+   "maxMemory":129957888,
+   "ownedPartitionCount":68,
+   "usedMemory":60688784,
+   "freeMemory":24311408,
+   "totalMemory":85000192,
+   "connectedClientCount":1,
+   "master":true
+}
+```
+
+===== Retrieve Connection Manager Information
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/members/{member}/connectionManager`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/members/192.168.2.78:5701/connectionManager
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+{
+  "clientConnectionCount":2,
+  "activeConnectionCount":5,
+  "connectionCount":5
+}
+```
+
+===== Retrieve Operation Service Information
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/members/{member}/operationService`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/members/192.168.2.78:5701/operationService
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+{
+  "responseQueueSize":0,
+  "operationExecutorQueueSize":0,
+  "runningOperationsCount":0,
+  "remoteOperationCount":1,
+  "executedOperationCount":461139,
+  "operationThreadCount":8
+}
+```
+
+===== Retrieve Event Service Information
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/members/{member}/eventService`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/members/192.168.2.78:5701/eventService
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+{
+  "eventThreadCount":5,
+  "eventQueueCapacity":1000000,
+  "eventQueueSize":0
+}
+```
+
+===== Retrieve Partition Service Information
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/members/{member}/partitionService`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/members/192.168.2.78:5701/partitionService
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+{
+  "partitionCount":271,
+  "activePartitionCount":68
+}
+```
+
+===== Retrieve Proxy Service Information
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/members/{member}/proxyService`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/members/192.168.2.78:5701/proxyService
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+{
+  "proxyCount":8
+}
+```
+
+===== Retrieve All Managed Executors
++ *Request Type:* GET
++ *URL:* `/rest/clusters/{clustername}/members/{member}/managedExecutors`
++ *Request:*
+
+	```plain
+	curl http://localhost:8083/mancenter/rest/clusters/dev/members/192.168.2.78:5701/managedExecutors
+	```
++ *Response:* `200` (application/json)
++ *Body:*
+
+	```json
+	["hz:system","hz:scheduled","hz:client","hz:query","hz:io","hz:async"]
+	```
+
+===== Retrieve a Managed Executor
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/members/{member}/managedExecutors/{managedExecutor}`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/members/192.168.2.78:5701
+  /managedExecutors/hz:system
+```
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+{
+  "name":"hz:system",
+  "queueSize":0,
+  "poolSize":0,
+  "remainingQueueCapacity":2147483647,
+  "maximumPoolSize":4,
+  "completedTaskCount":12,
+  "terminated":false
+}
+```
+
+[[clients-resource]]
+==== Clients Resource
+
+This resource returns a list of clients belonging to the provided cluster.
+
+===== Retrieve List of Clients
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/clients`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/clients
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+["192.168.2.78:61708"]
+```
+
+===== Retrieve Client Information
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/clients/{client}`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/clients/192.168.2.78:61708
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+{
+  "uuid":"6fae7af6-7a7c-4fa5-b165-cde24cf070f5",
+  "address":"192.168.2.78:61708",
+  "clientType":"JAVA"
+}
+```
+
+[[maps-resource]]
+==== Maps Resource
+
+This resource returns a list of maps belonging to the provided cluster.
+
+
+===== Retrieve List of Maps
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/maps`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/maps
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+["customers","orders"]
+```
+
+===== Retrieve Map Information
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/maps/{mapName}`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/maps/customers
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+{
+  "cluster":"dev",
+  "name":"customers",
+  "ownedEntryCount":1000,
+  "backupEntryCount":1000,
+  "ownedEntryMemoryCost":157890,
+  "backupEntryMemoryCost":113683,
+  "heapCost":297005,
+  "lockedEntryCount":0,
+  "dirtyEntryCount":0,
+  "hits":3001,
+  "lastAccessTime":1403608925777,
+  "lastUpdateTime":1403608925777,
+  "creationTime":1403602693388,
+  "putOperationCount":110630,
+  "getOperationCount":165945,
+  "removeOperationCount":55315,
+  "otherOperationCount":0,
+  "events":0,
+  "maxPutLatency":52,
+  "maxGetLatency":30,
+  "maxRemoveLatency":21
+}
+```
+
+[[multimaps-resource]]
+==== MultiMaps Resource
+
+This resource returns a list of multimaps belonging to the provided cluster.
+
+
+===== Retrieve List of MultiMaps
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/multimaps`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/multimaps
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+["customerAddresses"]
+```
+
+===== Retrieve MultiMap Information
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/multimaps/{multimapname}`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/multimaps/customerAddresses
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+{
+  "cluster":"dev",
+  "name":"customerAddresses",
+  "ownedEntryCount":996,
+  "backupEntryCount":996,
+  "ownedEntryMemoryCost":0,
+  "backupEntryMemoryCost":0,
+  "heapCost":0,
+  "lockedEntryCount":0,
+  "dirtyEntryCount":0,
+  "hits":0,
+  "lastAccessTime":1403603095521,
+  "lastUpdateTime":1403603095521,
+  "creationTime":1403602694158,
+  "putOperationCount":166041,
+  "getOperationCount":110694,
+  "removeOperationCount":55347,
+  "otherOperationCount":0,
+  "events":0,
+  "maxPutLatency":77,
+  "maxGetLatency":69,
+  "maxRemoveLatency":42
+}
+```
+
+[[queues-resource]]
+==== Queues Resource
+
+This resource returns a list of queues belonging to the provided cluster.
+
+===== Retrieve List of Queues
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/queues`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/queues
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json	
+["messages"]
+```
+
+===== Retrieve Queue Information
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/queues/{queueName}`
+* _Request:_
++	
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/queues/messages
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+{
+  "cluster":"dev",
+  "name":"messages",
+  "ownedItemCount":55408,
+  "backupItemCount":55408,
+  "minAge":0,
+  "maxAge":0,
+  "aveAge":0,
+  "numberOfOffers":55408,
+  "numberOfRejectedOffers":0,
+  "numberOfPolls":0,
+  "numberOfEmptyPolls":0,
+  "numberOfOtherOperations":0,
+  "numberOfEvents":0,
+  "creationTime":1403602694196
+}
+```
+
+[[topics-resource]]
+==== Topics Resource
+
+This resource returns a list of topics belonging to the provided cluster.
+
+
+===== Retrieve List of Topics
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/topics`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/topics
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+["news"]
+```
+
+===== Retrieve Topic Information
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/topics/{topicName}`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/topics/news
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+{
+  "cluster":"dev",
+  "name":"news",
+  "numberOfPublishes":56370,
+  "totalReceivedMessages":56370,
+  "creationTime":1403602693411
+}
+```
+
+[[executors-resource]]
+==== Executors Resource
+
+This resource returns a list of executors belonging to the provided cluster.
+
+
+===== Retrieve List of Executors
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/executors`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/executors
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+["order-executor"]
+```
+
+===== Retrieve Executor Information [GET] [/rest/clusters/{clustername}/executors/{executorName}]
+
+* _Request Type:_ GET
+* _URL:_ `/rest/clusters/{clustername}/executors/{executorName}`
+* _Request:_
++
+```plain
+curl http://localhost:8083/mancenter/rest/clusters/dev/executors/order-executor
+```
+
+* _Response:_ `200` (application/json)
+* _Body:_
++
+```json
+{
+  "cluster":"dev",
+  "name":"order-executor",
+  "creationTime":1403602694196,
+  "pendingTaskCount":0,
+  "startedTaskCount":1241,
+  "completedTaskCount":1241,
+  "cancelledTaskCount":0
+}
+```
+
