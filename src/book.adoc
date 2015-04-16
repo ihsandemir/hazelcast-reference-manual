@@ -196,5 +196,8 @@ include::19HazelcastSimulator/Coordinator.adoc[]
 include::19HazelcastSimulator/Communicator.adoc[]
 include::19HazelcastSimulator/SimulatorProperties.adoc[]
 include::20WAN/WANReplication.adoc[]
+include::21HazelcastConfiguration
+include::22NetworkPartitioning/NetworkPartitioning.adoc[]
+
 
 
