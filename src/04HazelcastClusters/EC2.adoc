@@ -6,6 +6,13 @@ Hazelcast supports EC2 Auto Discovery. It is useful when you do not want or cann
 
 You need to add the `hazelcast-cloud.jar` dependency to your project. Note that it is also bundled inside `hazelcast-all.jar`. The Hazelcast cloud module does not depend on any other third party modules.
 
+To set your Hazelcast to EC2 Auto Discovery, set the following configuration elements. Refer to the <<aws-element, aws element section>> for the full description of the EC2 auto-discovery configuration elements.
+
+- Set `multicast enabled` to "false".
+- Set `tcp-ip enabled` to "false".
+- Set `aws enabled` to "true".
+- Set `access-key`, `secret-key`, `region`, etc. for your AWS values.
+
 The following is an example declarative configuration.
 
 
@@ -26,11 +33,4 @@ The following is an example declarative configuration.
   </aws>
 </join>
 ```
-
-
-*_RELATED INFORMATION_*
-
-_Please refer to the <<aws-element, aws element section>> for the full description of EC2 auto-discovery configuration._
-
-
 
