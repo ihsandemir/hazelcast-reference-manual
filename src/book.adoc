@@ -199,6 +199,7 @@ include::20WAN/WANReplication.adoc[]
 include::21HazelcastConfiguration
 include::22NetworkPartitioning/NetworkPartitioning.adoc[]
 include::23LicenseQuestions/LicenseQuestions.adoc[]
+include::24FAQ/FAQ.adoc[]
 
 
 
