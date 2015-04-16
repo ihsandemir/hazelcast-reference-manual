@@ -24,7 +24,7 @@ Once nodes are discovered, all the communication between them will be via TCP/IP
 
 *_RELATED INFORMATION_*
 
-_Please refer to the <<hazelcast-cluster-discovery, Hazelcast Cluster Discovery section>> for detailed information._
+_Please refer to the <<cluster-discovery, Hazelcast Cluster Discovery section>> for detailed information._
 
 [[what-happens-when-a-node-goes-down]]
 === What happens when a node goes down?

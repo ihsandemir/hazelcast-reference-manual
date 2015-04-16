@@ -46,12 +46,12 @@ Here is, step by step, how Hazelcast split brain merge happens:
 . The oldest member of the cluster checks if there is another cluster with the same *group-name* and *group-password* in the network.
 . If the oldest member finds such a cluster, then it figures out which cluster should merge to the other.
 . Each member of the merging cluster will do the following.
-..Pause.
-..Take locally owned map entries.
-..Close all of its network connections (detach from its cluster).
-..Join to the new cluster.
-..Send merge request for each of its locally owned map entry.
-..Resume.
+.. Pause.
+.. Take locally owned map entries.
+.. Close all of its network connections (detach from its cluster).
+.. Join to the new cluster.
+.. Send merge request for each of its locally owned map entry.
+.. Resume.
 
 Each member of the merging cluster rejoins the new cluster and sends a merge request for each of its locally owned map entries. Two important points:
 

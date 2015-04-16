@@ -113,7 +113,7 @@ or by setting the properties inside the `hazelcast.xml` (where xxx is the reques
 *_RELATED INFORMATION_*
 
 _You can download the white paper *Hazelcast on AWS: Best Practices for Deployment* from
-http://hazelcast.com/resources/hazelcast-on-aws-best-practices-for-deployment/Hazelcast.com._
+http://hazelcast.com/resources/hazelcast-on-aws-best-practices-for-deployment/[Hazelcast.com]._
 
 
 *_RELATED INFORMATION_*
