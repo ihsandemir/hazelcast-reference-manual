@@ -178,5 +178,10 @@ include::17Security/Credentials.adoc[]
 include::17Security/ClusterLoginModule.adoc[]
 include::17Security/ClusterMemberSecurity.adoc[]
 include::17Security/NativeClientSecurity.adoc[]
-
+include::18Performance/DataAffinity.adoc[]
+include::18Performance/ThreadingModel/IOThreading.adoc[]
+include::18Performance/ThreadingModel/EventThreading.adoc[]
+include::18Performance/ThreadingModel/OperationThreading.adoc[]
+include::18Performance/BackPressure.adoc[]
+include::18Performance/HazelcastPerformanceOnAWS.adoc[]
 
