@@ -5,63 +5,62 @@ NOTE: When explaining configuration elements and attributes, most of the section
 
 All network related configuration is performed via the `network` element in the Hazelcast XML configuration file or the class `NetworkConfig` when using programmatic configuration. Let's first give the examples for these two approaches. Then we will look at its sub-elements and attributes.
 
-[cols="asciidoc,asciidoc"]
+[cols="5a,3a"]
 |=========================
 |Declarative|Programmatic
 
 |
-
 [source,xml]
-------------------------------
+----------
 <network>
-        <public-address></public-address>
-        <port auto-increment="true" port-count="100">5701</port>
-        <outbound-ports>
-            <ports>0</ports>
-        </outbound-ports>
-        <reuse-address>false</reuse-address>
-        <join>
-            <multicast enabled="true">
-                <multicast-group>224.2.2.3</multicast-group>
-                <multicast-port>54327</multicast-port>
-            </multicast>
-            <tcp-ip enabled="false">
-                <interface>127.0.0.1</interface>
-            </tcp-ip>
-            <aws enabled="false">
-                <access-key>my-access-key</access-key>
-                <secret-key>my-secret-key</secret-key>
-                <region>us-west-1</region>
-                <host-header>ec2.amazonaws.com</host-header>
-                <security-group-name>hazelcast-sg</security-group-name>
-                <tag-key>type</tag-key>
-                <tag-value>hz-nodes</tag-value>
-            </aws>
-        </join>
-        <interfaces enabled="false">
-            <interface>10.10.1.*</interface>
-        </interfaces>
-        <ssl enabled="false" />
-        <socket-interceptor enabled="false" />
-        <symmetric-encryption enabled="false">
-            <algorithm>PBEWithMD5AndDES</algorithm>
-            <salt>thesalt</salt>
-            <password>thepass</password>
-            <iteration-count>19</iteration-count>
-        </symmetric-encryption>
-    </network>   
-------------------------------
+    <public-address></public-address>
+    <port auto-increment="true" port-count="100">5701</port>
+    <outbound-ports>
+      <ports>0</ports>
+    </outbound-ports>
+    <reuse-address>false</reuse-address>
+    <join>
+       <multicast enabled="true">
+          <multicast-group>224.2.2.3</multicast-group>
+          <multicast-port>54327</multicast-port>
+       </multicast>
+       <tcp-ip enabled="false">
+          <interface>127.0.0.1</interface>
+       </tcp-ip>
+       <aws enabled="false">
+          <access-key>my-access-key</access-key>
+          <secret-key>my-secret-key</secret-key>
+          <region>us-west-1</region>
+          <host-header>ec2.amazonaws.com</host-header>
+          <security-group-name>hazelcast-sg</security-group-name>
+          <tag-key>type</tag-key>
+          <tag-value>hz-nodes</tag-value>
+       </aws>
+     </join>
+     <interfaces enabled="false">
+        <interface>10.10.1.*</interface>
+     </interfaces>
+     <ssl enabled="false" />
+     <socket-interceptor enabled="false" />
+     <symmetric-encryption enabled="false">
+        <algorithm>PBEWithMD5AndDES</algorithm>
+        <salt>thesalt</salt>
+        <password>thepass</password>
+        <iteration-count>19</iteration-count>
+     </symmetric-encryption>
+</network>
+----------
 
 |
 
 [source,java]
-------------------------------
+--
 Network netConfig = new NetworkConfig();
 netConfig.setReuseAddress( false );
 
 AwsConfig awsConfig = new AwsConfig();
 awsConfig.setTagKey( "5551234" ).setTagValue( "Node1234" );
-------------------------------
+--
 |=========================
 
 It has the following sub-elements which are described in the following sections.
@@ -75,52 +74,9 @@ It has the following sub-elements which are described in the following sections.
 * <<ssl-configuration, SSL>>
 * <<socket-interceptor-configuration, Socket Interceptor>>
 * <<symmetric-encryption-configuration, Symmetric Encryption>>
-* <<ip-v6-configuration, IPv6 Support>> 
+* <<ip-v6-configuration, IPv6 Support>>
 
 [[public-address]]
 ==== Public Address
 
 `public-address` overrides the public address of a node. By default, a node selects its socket address as its public address. But behind a network address translation (NAT), two endpoints (nodes) may not be able to see/access each other. If both nodes set their public addresses to their defined addresses on NAT, then that way they can communicate with each other. In this case, their public addresses are not an address of a local network interface but a virtual address defined by NAT. It is optional to set and useful when you have a private cloud.
-
-
-
-
-[cols="asciidoc,asciidoc",options="header"]
-|==================================
-|Declarative |Programmatic
-
-|
-
-
-[source,python]
------------------------------------
-''' A multi-line
-    comment.'''
-def sub_word(mo):
-   ''' Single line comment.'''
-    word = mo.group('word')
-    if word in keywords[language]:
-        return quote + word + quote
-    else:
-        return word
------------------------------------
-
-
-
-|
-
-
-[source,python]
------------------------------------
-''' A multi-line
-    comment.'''
-def sub_word(mo):
-   ''' Single line comment.'''
-    word = mo.group('word')
-    if word in keywords[language]:
-        return quote + word + quote
-    else:
-        return word
------------------------------------
-
-|==================================

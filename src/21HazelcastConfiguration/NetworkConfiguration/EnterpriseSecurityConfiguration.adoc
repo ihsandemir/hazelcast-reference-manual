@@ -1,0 +1,14 @@
+[[ssl-configuration]]
+==== SSL
+
+This is a Hazelcast Enterprise feature, please see the <<security, Security chapter>>.
+
+[[socket-interceptor-configuration]]
+==== Socket Interceptor
+
+This is a Hazelcast Enterprise feature, please see the <<security, Security chapter>>.
+
+[[symmetric-encryption-configuration]]
+==== Symmetric Encryption
+
+This is a Hazelcast Enterprise feature, please see the <<security, Security chapter>>.

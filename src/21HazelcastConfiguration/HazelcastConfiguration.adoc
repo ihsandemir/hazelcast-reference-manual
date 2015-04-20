@@ -6,7 +6,7 @@ This chapter covers all the elements and attributes used to configure Hazelcast.
 - <<configuration-overview, Configuration Overview>>: Provides the options used to configure Hazelcast.
 - <<using-wildcard, Using Wildcard>>: Describes the usage of the wildcard character (`*`) while configuring Hazelcast.
 - <<using-variables, Using Variables>>: Describes how to use variables in declarative configurations.
-- <<composing-xml-configuration, Composing XML Configuration>>: Describes how to produce a declarative configuration file out of several configuration files.
+- <<composing-declarative-configuration, Composing Declarative Configuration>>: Describes how to produce a declarative configuration file out of several configuration files.
 
 
 The rest of the chapter explains the configuration items listed below.
@@ -22,7 +22,7 @@ The rest of the chapter explains the configuration items listed below.
 - <<semaphore-configuration, Semaphore>>
 - <<executor-service-configuration, Executor Service>>
 - <<serialization-configuration, Serialization>>
-- <<mapreduce-jobtracker-configuration, MapReduce Jobtracker>>
+- <<map-reduce-jobtracker-configuration, MapReduce Jobtracker>>
 - <<services-configuration, Services>>
 - <<management-center-configuration, Management Center>>
 - <<wan-replication-configuration, WAN Replication>>
@@ -31,7 +31,7 @@ The rest of the chapter explains the configuration items listed below.
 - <<logging-configuration, Logging>>
 
 
-The chapter ends with the <<advanced-configuration-properties, system property definitions>>.
+The chapter ends with the <<system-properties, Hazelcast system property definitions>>.
 
 
 

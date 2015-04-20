@@ -1,0 +1,405 @@
+[[listener-configurations]]
+=== Listener Configurations
+
+You can add or remove event listeners to/from the related object using the Hazelcast API.
+
+The downside of attaching listeners using this API is the possibility of missing events between creation of the object and registering a listener. To overcome this race condition, Hazelcast lets you register listeners in configuration. You can register listeners using either declarative, programmatic, or Spring configuration.
+
+[[membershiplistener]]
+==== MembershipListener
+
+[cols="a,a"]
+|=========================
+|
+[float]
+*Declarative*
+
+[source,xml]
+----------
+<listeners>
+ <listener>com.hazelcast.examples.MembershipListener</listener>
+</listeners>
+----------
+
+|
+[float]
+*Programmatic*
+
+
+[source,java]
+--
+config.addListenerConfig(new ListenerConfig( "com.hazelcast.examples.MembershipListener" ) );
+--
+
+2+|
+[float]
+*Spring XML*
+
+
+[source,xml]
+----------
+<hz:listeners>
+  <hz:listener class-name="com.hazelcast.spring.DummyMembershipListener"/>
+  <hz:listener implementation="dummyMembershipListener"/>
+</hz:listeners>
+----------
+|=========================
+
+
+[[distributedobjectlistener]]
+==== DistributedObjectListener
+
+[cols="a,a"]
+|=========================
+|
+[float]
+*Declarative*
+
+[source,xml]
+----------
+<listeners>
+ <listener>com.hazelcast.examples.DistributedObjectListener</listener>
+</listeners>
+----------
+
+|
+[float]
+*Programmatic*
+
+
+[source,java]
+--
+config.addListenerConfig(new ListenerConfig( "com.hazelcast.examples.DistributedObjectListener" ) );
+--
+
+2+|
+[float]
+*Spring XML*
+
+
+[source,xml]
+----------
+<hz:listeners>
+  <hz:listener class-name="com.hazelcast.spring.DummyDistributedObjectListener"/>
+  <hz:listener implementation="dummyDistributedObjectListener"/>
+</hz:listeners>
+----------
+|=========================
+
+
+
+[[migrationlistener]]
+==== MigrationListener
+
+[cols="a,a"]
+|=========================
+|
+[float]
+*Declarative*
+
+[source,xml]
+----------
+<listeners>
+ <listener>com.hazelcast.examples.MigrationListener</listener>
+</listeners>
+----------
+
+|
+[float]
+*Programmatic*
+
+
+[source,java]
+--
+config.addListenerConfig(new ListenerConfig( "com.hazelcast.examples.MigrationListener" ) );
+--
+
+2+|
+[float]
+*Spring XML*
+
+
+[source,xml]
+----------
+<hz:listeners>
+  <hz:listener class-name="com.hazelcast.spring.DummyMigrationListener"/>
+  <hz:listener implementation="dummyMigrationListener"/>
+</hz:listeners>
+----------
+|=========================
+
+
+[[lifecyclelistener]]
+==== LifecycleListener
+
+[cols="a,a"]
+|=========================
+|
+[float]
+*Declarative*
+
+[source,xml]
+----------
+<listeners>
+ <listener>com.hazelcast.examples.LifecycleListener</listener>
+</listeners>
+----------
+
+|
+[float]
+*Programmatic*
+
+
+[source,java]
+--
+config.addListenerConfig(new ListenerConfig( "com.hazelcast.examples.LifecycleListener" ) );
+--
+
+2+|
+[float]
+*Spring XML*
+
+
+[source,xml]
+----------
+<hz:listeners>
+  <hz:listener class-name="com.hazelcast.spring.DummyLifecycleListener"/>
+  <hz:listener implementation="dummyLifecycleListener"/>
+</hz:listeners>
+----------
+|=========================
+
+
+
+[[entrylistener-for-imap]]
+==== EntryListener for IMap
+
+[cols="a,a"]
+|=========================
+|
+[float]
+*Declarative*
+
+[source,xml]
+----------
+<map name="default">
+...
+  <entry-listeners>
+    <entry-listener include-value="true" local="false">
+      com.hazelcast.examples.EntryListener
+    </entry-listener>
+  </entry-listeners>
+</map>
+----------
+
+|
+[float]
+*Programmatic*
+
+
+[source,java]
+--
+mapConfig.addEntryListenerConfig(new EntryListenerConfig( "com.hazelcast.examples.EntryListener",false, false ) );
+--
+
+2+|
+[float]
+*Spring XML*
+
+
+[source,xml]
+----------
+<hz:map name="default">
+  <hz:entry-listeners>
+    <hz:entry-listener include-value="true"
+      class-name="com.hazelcast.spring.DummyEntryListener"/>
+    <hz:entry-listener implementation="dummyEntryListener" local="true"/>
+  </hz:entry-listeners>
+</hz:map>
+----------
+|=========================
+
+
+[[entrylistener-for-multimap]]
+==== EntryListener for MultiMap
+
+[cols="a,a"]
+|=========================
+|
+[float]
+*Declarative*
+
+[source,xml]
+----------
+<multimap name="default">
+  <value-collection-type>SET</value-collection-type>
+  <entry-listeners>
+    <entry-listener include-value="true" local="false">
+      com.hazelcast.examples.EntryListener
+    </entry-listener>
+  </entry-listeners>
+</multimap>
+----------
+
+|
+[float]
+*Programmatic*
+
+
+[source,java]
+--
+multiMapConfig.addEntryListenerConfig(new EntryListenerConfig( "com.hazelcast.examples.EntryListener",false, false ) );
+--
+
+2+|
+[float]
+*Spring XML*
+
+
+[source,xml]
+----------
+<hz:multimap name="default" value-collection-type="LIST">
+  <hz:entry-listeners>
+    <hz:entry-listener include-value="true"
+      class-name="com.hazelcast.spring.DummyEntryListener"/>
+    <hz:entry-listener implementation="dummyEntryListener" local="true"/>
+  </hz:entry-listeners>
+</hz:multimap>
+----------
+|=========================
+
+
+[[itemlistener-for-iqueue]]
+==== ItemListener for IQueueMap
+
+[cols="a,a"]
+|=========================
+|
+[float]
+*Declarative*
+
+[source,xml]
+----------
+<queue name="default">
+...
+  <item-listeners>
+    <item-listener include-value="true">
+      com.hazelcast.examples.ItemListener
+    </item-listener>
+  </item-listeners>
+</queue>
+----------
+
+|
+[float]
+*Programmatic*
+
+
+[source,java]
+--
+queueConfig.addItemListenerConfig(new ItemListenerConfig( "com.hazelcast.examples.ItemListener", true ) );
+--
+
+2+|
+[float]
+*Spring XML*
+
+
+[source,xml]
+----------
+<hz:queue name="default" >
+  <hz:item-listeners>
+    <hz:item-listener include-value="true"
+      class-name="com.hazelcast.spring.DummyItemListener"/>
+  </hz:item-listeners>
+</hz:queue>
+----------
+|=========================
+
+
+[[messagelistener-for-itopic]]
+==== MessageListener for ITopic
+
+[cols="a,a"]
+|=========================
+|
+[float]
+*Declarative*
+
+[source,xml]
+----------
+<topic name="default">
+  <message-listeners>
+    <message-listener>
+      com.hazelcast.examples.MessageListener
+    </message-listener>
+  </message-listeners>
+</topic>
+----------
+
+|
+[float]
+*Programmatic*
+
+
+[source,java]
+--
+topicConfig.addMessageListenerConfig(new ListenerConfig( "com.hazelcast.examples.MessageListener" ) );
+--
+
+2+|
+[float]
+*Spring XML*
+
+
+[source,xml]
+----------
+<hz:topic name="default">
+  <hz:message-listeners>
+    <hz:message-listener
+      class-name="com.hazelcast.spring.DummyMessageListener"/>
+  </hz:message-listeners>
+</hz:topic>
+----------
+|=========================
+
+
+[[clientlistener]]
+==== ClientListener
+
+[cols="a,a"]
+|=========================
+|
+[float]
+*Declarative*
+
+[source,xml]
+----------
+<listeners>
+ <listener>com.hazelcast.examples.ClientListener</listener>
+</listeners>
+----------
+
+|
+[float]
+*Programmatic*
+
+
+[source,java]
+--
+topicConfig.addMessageListenerConfig(new ListenerConfig( "com.hazelcast.examples.ClientListener" ) );
+--
+
+2+|
+[float]
+*Spring XML*
+
+
+[source,xml]
+----------
+<hz:listeners>
+  <hz:listener class-name="com.hazelcast.spring.DummyClientListener"/>
+  <hz:listener implementation="dummyClientListener"/>
+</hz:listeners>
+----------
+|=========================

@@ -1,0 +1,49 @@
+[[semaphore-configuration]]
+=== Semaphore Configuration
+
+*_RELATED INFORMATION_*
+
+_Please refer to <<isemaphore, ISemaphore>> to learn about the Hazelcast Distributed Semaphore._
+
+The following are example semaphore configurations.
+
+[cols="5a,3a"]
+|=========================
+|Declarative|Programmatic
+
+|
+[source,xml]
+----------
+<semaphore name="semaphore">
+   <backup-count>1</backup-count>
+   <async-backup-count>0</async-backup-count>
+   <initial-permits>3</initial-permits>
+</semaphore>
+----------
+
+|
+
+[source,java]
+--
+Config config = new Config();
+SemaphoreConfig semaphoreConfig = config.getSemaphoreConfig();
+semaphoreConfig.setName( "semaphore" ).setBackupCount( "1" )
+        .setInitialPermits( "3" );
+--
+|=========================
+
+
+It has below elements.
+
+* `initial-permits`: the thread count to which the concurrent access is limited. For example, if you set it to "3", concurrent access to the object is limited to 3 threads.
+* `backup-count`: Number of synchronous backups.
+* `async-backup-count`: Number of asynchronous backups.
+
+
+
+
+
+
+
+
+
