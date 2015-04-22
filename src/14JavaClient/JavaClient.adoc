@@ -1,5 +1,5 @@
-[[clients]]
-== Clients
+[[java-client]]
+== Hazelcast Java Client
 
 There are currently three ways to connect to a running Hazelcast cluster:
 
@@ -13,4 +13,4 @@ There can be hundreds, even thousands of clients connected to the cluster. By de
 
 Imagine a trading application where all the trading data are stored and managed in a Hazelcast cluster with tens of nodes. Swing/Web applications at the traders' desktops can use Native Clients to access and modify the data in the Hazelcast cluster.
 
-Currently, Hazelcast has Native Java, C++ and .NET Clients available.
+Currently, Hazelcast has Native Java, C++ and .NET Clients available. This chapter describes the Java Client.

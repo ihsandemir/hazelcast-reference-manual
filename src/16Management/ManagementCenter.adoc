@@ -16,7 +16,7 @@ Here are the steps:
 * You can directly start `mancenter-<version>.war` file from the command line. The following command will start Hazelcast Management Center on port 8080 with context root 'mancenter' (`http://localhost:8080/mancenter`).
 +
 ```java
-java -jar mancenter-*version*.war 8080 mancenter
+java -jar mancenter-<version>.war 8080 mancenter
 ```
 
 * Or, you can deploy it to your web server (Tomcat, Jetty, etc.). Let us say it is running at `http://localhost:8080/mancenter`.

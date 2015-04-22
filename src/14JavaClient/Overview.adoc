@@ -1,16 +1,10 @@
-[[java-client]]
-=== Java Client
-
-The Java client is the most full featured client. It is offered both with Hazelcast and Hazelcast Enterprise. 
-
 [[java-client-overview]]
-==== Overview
+=== Overview
 
-The main idea behind the Java client is to provide the same Hazelcast functionality by proxying each operation through a Hazelcast node.
-It can access and change distributed data, and it can listen to distributed events of an already established Hazelcast cluster from another Java application.
+The Java client is the most full featured client. It is offered both with Hazelcast and Hazelcast Enterprise.  The main idea behind the Java client is to provide the same Hazelcast functionality by proxying each operation through a Hazelcast node. It can access and change distributed data, and it can listen to distributed events of an already established Hazelcast cluster from another Java application.
 
 [[java-client-dependencies]]
-===== Dependencies
+==== Dependencies
 
 You should include two dependencies in your classpath to start using the Hazelcast client: `hazelcast.jar` and `hazelcast-client.jar`.
 
@@ -34,7 +28,7 @@ If you prefer to use maven, add the following lines to your `pom.xml`.
 
 
 [[getting-started-with-client-api]]
-===== Getting Started with Client API
+==== Getting Started with Client API
 
 The first step is the configuration. You can configure the Java client declaratively or programmatically. We will use the programmatic approach throughout this tutorial. Please refer to the <<java-client-declarative-configuration, Java Client Declarative Configuration section>> for details.
 
@@ -73,7 +67,7 @@ client.shutdown();
 
 
 [[java-client-operation-modes]]
-===== Operation Modes
+==== Operation Modes
 
 The client has two operation modes because of the distributed nature of the data and cluster.
 
@@ -84,7 +78,7 @@ The client has two operation modes because of the distributed nature of the data
 In dummy client mode, the client will only connect to one of the configured addresses. This single node will behave as a gateway to the other nodes. For any operation requested from the client, it will redirect the request to the relevant node and return the response back to the client returned from this node.
 
 [[java-client-failure-handling]]
-===== Failure Handling
+==== Failure Handling
 
 There are two main failure cases you should be aware of, and configurations you can perform to achieve proper behavior.
 
@@ -101,7 +95,7 @@ While sending the requests to related nodes, operation can fail due to various r
 The number of retries is given with the property `hazelcast.client.request.retry.count` in `ClientProperties`. The client will resend the request as many as RETRY-COUNT, then it will throw an exception. Please see the <<client-properties, Client Properties section>>.
 
 [[java-client-supported-distributed-data-structures]]
-===== Supported Distributed Data Structures
+==== Supported Distributed Data Structures
 
 Most of the Distributed Data Structures are supported by the client. Please check for the exceptions for the clients in other languages.
 
@@ -170,7 +164,7 @@ The distributed data structures listed below are also supported by the client. S
 ** <<lock, Lock>>
 
 [[java-client-services]]
-===== Client Services
+==== Client Services
 
 Below services are provided for some common functionalities on the client side.
 
@@ -246,11 +240,11 @@ lifecycleService.shutdown();
 ----
 
 [[java-client-listeners]]
-===== Client Listeners
+==== Client Listeners
 
 You can configure listeners to listen to various event types on the client side. You can configure global events not relating to any distributed object through <<client-listenerconfig, Client ListenerConfig>>. You should configure distributed object listeners like map entry listeners or list item listeners through their proxies. You can refer to the related sections under each distributed data structure in this reference manual.
 
 [[java-client-transactions]]
-===== Client Transactions
+==== Client Transactions
 
 Transactional distributed objects are supported on the client side. Please see the <<transactions, Transactions chapter>> on how to use them.
