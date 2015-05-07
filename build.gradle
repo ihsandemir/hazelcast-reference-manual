@@ -25,7 +25,8 @@ asciidoctor{
                 'highlightjs-theme' : 'solarized_light',
                 toc                 : 'left',
                 idprefix            : '',
-                idseparator         : '-'
+                idseparator         : '-',
+                stylesheet          : '../asciidoctor-shylesheet-factory/stylesheets/colony.css'
             ]
         ]
 }
