@@ -4,13 +4,14 @@
 [[wan-replication]]
 === WAN Replication
 
-image::enterprise-onlycopy.jpg[]
+There are cases where you need to synchronize multiple clusters to the same state. Synchronization of clusters, also known as
+WAN (Wide Area Network) Replication, is mainly used for replicating stats of different clusters over WAN environments like
+the Internet. 
 
-
-There are cases where you need to synchronize multiple clusters to the same state. Synchronization of clusters, also known as WAN (Wide Area Network) Replication, is mainly used for replicating stats of different clusters over WAN environments like the Internet. 
-
-Imagine you have different data centers in New York, London and Tokyo each running an independent Hazelcast cluster. Every cluster would be operating at native speed in their own LAN (Local Area Network) settings but you also want some or all recordsets in
-these clusters to be replicated to each other: updates to Tokyo cluster also go to London and New York, in the meantime updates from New York cluster are synchronized to Tokyo and London.
+Imagine you have different data centers in New York, London and Tokyo each running an independent Hazelcast cluster. Every cluster
+would be operating at native speed in their own LAN (Local Area Network) settings but you also want some or all recordsets in
+these clusters to be replicated to each other: updates to Tokyo cluster also go to London and New York, in the meantime updates
+from New York cluster are synchronized to Tokyo and London.
 
 [[configuring-wan-replication]]
 ==== Configuring WAN Replication
@@ -83,40 +84,184 @@ You see that we have `my-shared-map` configured to replicate itself to the clust
 
 You will also have to define a `merge policy` for merging replica entries and resolving conflicts during the merge as mentioned before.
 
-[[wan-replication-queue-size]]
+
+[[enterprise-wan-replication]]
+=== Enterprise WAN Replication
+
+image::enterprise-onlycopy.jpg[]
+
+[[replication-implementations]]
+==== Replication Implementations
+
+Enterprise WAN replication has two different replication implementations. These are `WanNoDelayReplication` and `WanBatchReplication` implementations.
+You can configure them using the configuration element `replication-impl`, as shown below.
+
+[source,xml]
+----
+<hazelcast>
+  <wan-replication name="my-wan-cluster">
+    <target-cluster group-name="tokyo" group-password="tokyo-pass">
+      <replication-impl>com.hazelcast.enterprise.wan.replication.WanNoDelayReplication</replication-impl>
+      ...
+    </target-cluster>
+  </wan-replication>
+</hazelcast>
+----
+
+[source,xml]
+----
+<hazelcast>
+  <wan-replication name="my-wan-cluster">
+    <target-cluster group-name="tokyo" group-password="tokyo-pass">
+      <replication-impl>com.hazelcast.enterprise.wan.replication.WanBatchReplication</replication-impl>
+      ...
+    </target-cluster>
+  </wan-replication>
+</hazelcast>
+----
+
+`WanNoDelayReplication` sends replication events to the target cluster as soon as they are generated. As its name suggests,
+`WanBatchReplication` waits until:
+
+* a pre-defined number of replication events are generated, (please refer to the <<wan-replication-batch-size, Wan Replication Batch Size section>>).
+* or a pre-defined amount of time is passed (please refer to the <<wan-replication-batch-frequency, Wan Replication Batch Frequency section>>).
+
+[[wan-replication-batch-size]]
+==== WAN Replication Batch Size
+
+When `WanBatchReplication` is preferred as the replication implementation, the maximum size of events that are sent in a single batch can be changed 
+depending on your needs. Default value for batch size is `50`.
+
+To change the `WanBatchReplication` batch size, the Hazelcast Enterprise user can use the `hazelcast.enterprise.wanrep.batch.size`
+configuration element.
+
+You can do this by setting the property on the command line (where xxx is the batch size),
+
+```
+-Dhazelcast.enterprise.wanrep.batch.size=xxx
+```
+
+or by setting the properties inside the `hazelcast.xml` (where xxx is the requested batch size):
+
+[source,xml]
+----
+<hazelcast>
+  <properties>
+    <property name="hazelcast.enterprise.wanrep.batch.size">xxx</property>
+  </properties>
+</hazelcast>
+---- 
+
+[[wan-replication-batch-frequency]]
+==== WAN Replication Batch Frequency
+
+When `WanBatchReplication`is preferred as the replication implementation and the number of generated WAN replication events does not reach <<wan-replication-batch-size, Wan Replication Batch Size>>,
+they are sent to the target cluster after a certain amount of time is passed.
+
+Default value of for this duration is `5` seconds.
+
+To change the `WanBatchReplication` batch sending frequency, the Hazelcast Enterprise user can use the `hazelcast.enterprise.wanrep.batchfrequency.seconds`
+configuration element.
+
+You can do this by setting the property on the command line (where xxx is the batch sending frequency in seconds),
+
+```
+-Dhazelcast.enterprise.wanrep.batchfrequency.seconds=xxx
+```
+
+or by setting the properties inside the `hazelcast.xml` (where xxx is the requested batch sending frequency):
+
+[source,xml]
+—---
+<hazelcast>
+  <properties>
+    <property name="hazelcast.enterprise.wanrep.batchfrequency.seconds">xxx</property>
+  </properties>
+</hazelcast>
+—--- 
+
+[[wan-replication-operation-timeout]]
+==== WAN Replication Operation Timeout
+
+After a replication event is sent to the target cluster, target member waits for an acknowledge to be sure that event is reached to target.
+If confirmation is not received in the period of timeout duration, event is resent to the target cluster.
+
+Default value of for this duration is `5000` milliseconds.
+
+You can change this duration depending on your network latency. The Hazelcast Enterprise user can use the `hazelcast.enterprise.wanrep.optimeout.millis`
+configuration element to change the timeout duration.
+
+You can do this by setting the property on the command line (where xxx is the timeout duration in milliseconds),
+
+```
+-Dhazelcast.enterprise.wanrep.optimeout.millis=xxx
+```
+
+or by setting the properties inside the `hazelcast.xml` (where xxx is the requested timeout duration):
+
+[source,xml]
+----
+<hazelcast>
+  <properties>
+    <property name="hazelcast.enterprise.wanrep.optimeout.millis">xxx</property>
+  </properties>
+</hazelcast>
+---- 
+
+
+[[wan-replication-queue-capacity]]
 ==== WAN Replication Queue Capacity
 
-For huge clusters or high data mutation rates, you might need to increase the replication queue capacity. The default queue size for replication queues is `100000`. This means, if you have heavy put/update/remove rates, you might exceed the queue capacity
+For huge clusters or high data mutation rates, you might need to increase the replication queue size. The default queue
+size for replication queues is `100000`. This means, if you have heavy put/update/remove rates, you might exceed the queue size
 so that the oldest, not yet replicated, updates might get lost.
  
-To increase the replication queue size, a Hazelcast Enterprise user can use the `hazelcast.enterprise.wanrep.queue.capacity` configuration property.
+To increase the replication queue capacity, the Hazelcast Enterprise user can use the `hazelcast.enterprise.wanrep.queue.capacity`
+configuration element.
 
-You can do this by setting the property on the command line (where xxx is the queue size):
+You can do this by setting the property on the command line (where xxx is the queue size),
 
-```plain
+```
 -Dhazelcast.enterprise.wanrep.queue.capacity=xxx
 ```
 
 or by setting the properties inside the `hazelcast.xml` (where xxx is the requested queue size):
 
-```xml
+[source,xml]
+----
 <hazelcast>
   <properties>
     <property name="hazelcast.enterprise.wanrep.queue.capacity">xxx</property>
   </properties>
 </hazelcast>
-```
+----
 
-[[wan-replication-additional-information]]
-==== WAN Replication Additional Information
+[[enterprise-wan-replication-additional-information]]
+==== Additional Information
+
+Each cluster in WAN topology has to have a unique `group-name` property for a proper handling of forwarded events. 
+
+[NOTE]
+====
 
 *_RELATED INFORMATION_*
 
-_You can download the white paper *Hazelcast on AWS: Best Practices for Deployment* from
-http://hazelcast.com/resources/hazelcast-on-aws-best-practices-for-deployment/[Hazelcast.com]._
+You can download the white paper *Hazelcast on AWS: Best Practices for Deployment* from
+http://hazelcast.com/resources/hazelcast-on-aws-best-practices-for-deployment/[Hazelcast.com].
+====
 
+
+
+[NOTE]
+====
 
 *_RELATED INFORMATION_*
 
-_Please refer to the <<wan-replication-configuration, WAN Replication Configuration section>> for a full description of Hazelcast WAN Replication configuration._
+Please refer to the <<wan-replication-configuration, WAN Replication Configuration section>> for a full description of Hazelcast WAN Replication configuration.
+====
+
+
+
+
+
 
