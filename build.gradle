@@ -26,7 +26,7 @@ asciidoctor{
                 toc                 : 'left',
                 idprefix            : '',
                 idseparator         : '-',
-                stylesheet          : '../asciidoctor-shylesheet-factory/stylesheets/colony.css'
+                stylesheet          : '../asciidoctor-shylesheet-factory/stylesheets/asciidoctor.css'
             ]
         ]
 }
