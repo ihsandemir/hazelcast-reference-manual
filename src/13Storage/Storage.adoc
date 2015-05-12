@@ -124,7 +124,7 @@ And, the following are the High-Denisty Memory First Generation related system p
 |false
 |bool
 |Enables/disables usage of `sun.misc.Unsafe` when allocating, reading and modifying off-heap storage.
-
+|===
 
 ## Sizing Practices
 
