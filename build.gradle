@@ -22,11 +22,11 @@ asciidoctor{
             attributes: [
                 //'source-highlighter': 'coderay',
                 'source-highlighter': 'highlightjs',
-                'highlightjs-theme' : 'solarized_light',
+                'highlightjs-theme' : 'tomorrow',
                 toc                 : 'left',
                 idprefix            : '',
                 idseparator         : '-',
-                stylesheet          : '../asciidoctor-shylesheet-factory/stylesheets/asciidoctor.css'
+                stylesheet          : '/asciidoctor-shylesheet-factory/stylesheets/colony.css'
             ]
         ]
 }
