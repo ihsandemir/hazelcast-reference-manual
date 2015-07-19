@@ -4,8 +4,11 @@
 ifndef::imagesdir[:imagesdir: images]
 :front-cover-image: images/cover.png
 :icons: font
+:last-update-label!:
 
-= Hazelcast Reference Manual 
+image::DocLogo.png[]
+
+= Hazelcast Reference Manual
 
 :numbered!:
 

@@ -25,8 +25,8 @@ asciidoctor{
                 'highlightjs-theme' : 'tomorrow',
                 toc                 : 'left',
                 idprefix            : '',
-                idseparator         : '-',
-                stylesheet          : '/asciidoctor-shylesheet-factory/stylesheets/colony.css'
+                idseparator         : '-'
+                // stylesheet          : '/asciidoctor-shylesheet-factory/stylesheets/colony.css'
             ]
         ]
 }
