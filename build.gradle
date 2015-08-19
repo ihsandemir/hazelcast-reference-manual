@@ -1,0 +1,58 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
+        classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.8'
+        classpath 'org.asciidoctor:asciidoctorj-epub3:1.5.0-alpha.4'
+    }
+}
+
+apply plugin: 'org.asciidoctor.convert'
+import org.asciidoctor.gradle.AsciidoctorTask
+
+// common Asciidoctor settings
+tasks.withType(AsciidoctorTask) { docTask ->
+    sourceDir "$sources"
+    outputDir "$output"
+    sources {
+      include 'book.adoc'
+    }
+    options = [
+        logDocuments: true,
+        doctype: 'book',
+        icons: 'font',
+        attributes: [
+            'source-highlighter': 'coderay',
+            experimental: true,
+            //'source-highlighter': 'highlightjs',
+            //'highlightjs-theme' : 'tomorrow',
+            toc                 : 'left',
+            idprefix            : '',
+            idseparator         : '-'
+        ]
+    ]
+}
+
+// HTML specific settings
+task generateHtml (type: AsciidoctorTask, description: 'Generates single and multiple HTML documentation.', group: 'Documentation') {
+    backend = 'html5'
+}
+
+// PDF specific settings
+task generatePdf (type: AsciidoctorTask, description: 'Generates PDF documentation.', group: 'Documentation') {
+    backend = 'pdf'
+}
+
+// epub3 specific settings
+task generateEpub (type: AsciidoctorTask, description: 'Generates PDF documentation.', group: 'Documentation') {
+    backend = 'epub3'
+}
+
+task cleanup(type: Delete) {
+  delete "$output"
+}
+
+task generateAll (dependsOn: [cleanup, generateHtml, generatePdf, generateEpub])
